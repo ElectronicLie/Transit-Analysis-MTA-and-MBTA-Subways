@@ -7,7 +7,7 @@ public class Main{
     public static void main(String[] args){
         // TransitSystem mta = new TransitSystem("mta", Mta.LINES);
         // Mta.addIntxnsAndTerminals(mta);
-        // mta.doneAddingLines();
+        // mta.doneAddingLi nes();
         // mta.updateStationLineData();
         // System.out.println(new File(".").getAbsolutePath());
         // File directory = new File("transit");
