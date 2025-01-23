@@ -5,10 +5,8 @@ import java.util.Arrays;
 
 public class Vector extends Matrix{
 
-  protected double[] ary;
-
   public Vector(){
-    ary = new double[0];
+    vals = new double[0][0];
   }
 
   public Vector(double[] ary){
@@ -16,7 +14,6 @@ public class Vector extends Matrix{
     for (int i = 0; i < ary.length; i++){
       vals[i][0] = ary[i];
     }
-    this.ary = ary;
   }
 
   public Vector(int[] ary){
@@ -28,7 +25,6 @@ public class Vector extends Matrix{
     for (int i = 0; i < ary.length; i++){
       vals[i][0] = ary[i];
     }
-    this.ary = doubleAry;
   }
 
   // public Vector(int[] intAry){
@@ -45,7 +41,6 @@ public class Vector extends Matrix{
 
   public Vector(int dim){
     vals = new double[dim][1];
-    ary = new double[dim];
   }
 
   public static Vector zero(int dim){
@@ -66,6 +61,10 @@ public class Vector extends Matrix{
   }
 
   public double[] getVals(){
+    double[] ary = new double[dim()];
+    for (int i = 0; i < dim(); i++){
+      ary[i] = vals[i][0];
+    }
     return ary;
   }
 
@@ -154,7 +153,8 @@ public class Vector extends Matrix{
   // }
 
   protected Vector sorted(){
-    double[] aryCopy = Arrays.copyOf(this.ary, this.ary.length);
+    double[] ary = getVals();
+    double[] aryCopy = Arrays.copyOf(ary, ary.length);
     double temp;
     for (int i = aryCopy.length-1; i > 0; i--){
       for (int j = 0; j < i; j++){
@@ -169,9 +169,10 @@ public class Vector extends Matrix{
   }
 
   public Vector copy(){
-    double[] newAry = new double[this.ary.length];
-    for (int i = 0; i < this.ary.length; i++){
-      newAry[i] = this.ary[i];
+    double[] ary = getVals();
+    double[] newAry = new double[ary.length];
+    for (int i = 0; i < ary.length; i++){
+      newAry[i] = ary[i];
     }
     return new Vector(newAry);
   }

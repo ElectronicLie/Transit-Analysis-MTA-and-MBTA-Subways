@@ -29,4 +29,13 @@ public class Eigenvector extends Vector{
     return "\n"+super.toString() + "eigenvalue: "+eigenval+"\n";
   }
 
+  public Eigenvector copy(){
+    double[] ary = getVals();
+    double[] newAry = new double[ary.length];
+    for (int i = 0; i < ary.length; i++){
+      newAry[i] = ary[i];
+    }
+    return new Eigenvector(newAry, eigenval);
+  }
+
 }

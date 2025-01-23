@@ -233,7 +233,7 @@ public class Matrix{
   }
 
   public SquareMatrix coVarianceMatrix(){
-    Matrix coV = this;
+    Matrix coV = this.copy();
     // System.out.println(coV);
     coV.meanCenterRows();
     // System.out.println(coV);
@@ -466,7 +466,7 @@ public class Matrix{
     Eigenvector pc;
     double eigenvalsSum = 0;
     for (int i = 0; i < pca.size(); i++){
-      pc = pca.get(i);
+      pc = pca.get(i).copy();
       // System.out.println(pc);
       eigenvalsSum += pc.getEigenvalue();
       pc.scale(pc.getEigenvalue());

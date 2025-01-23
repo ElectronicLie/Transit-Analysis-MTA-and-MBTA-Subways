@@ -4,6 +4,8 @@ import linalg.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.io.FileWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
 import malo.Malo;
@@ -15,12 +17,14 @@ public class TransitSystem extends EvenNetwork<Stop>{
   protected MarkovChain mc;
   protected boolean doneAddingLines;
   protected String name;
+  protected boolean updated;
 
-  public TransitSystem(String n, String[] lns){
+  public TransitSystem(String n, String[] lns, boolean u){
     nodes = new ArrayList<Stop>();
     this.lines = lns;
     doneAddingLines = false;
     this.name = n;
+    this.updated = u;
   }
 
   public void doneAddingLines(){
@@ -44,7 +48,7 @@ public class TransitSystem extends EvenNetwork<Stop>{
     return mc;
   }
 
-  public void updateStationLineData(){
+  protected void updateStationLineData(){
     double[] weights = getStopWeights();
     if (weights.length != nodes.size()){
       throw new IllegalArgumentException("numbers of stops and stop weights are unequal");
@@ -58,33 +62,40 @@ public class TransitSystem extends EvenNetwork<Stop>{
     }
     Matrix data = new Matrix(cols);
     // data.scale(1000);
-    String str = data.toString();
-    System.out.println(str);
-    try (FileWriter writer = new FileWriter(name+"_stop-line-data.txt")){
+    String str = data.toString(-9);
+    // System.out.println(str);
+    String fileName = "src/main/java/transit/"+name+"_stop-line-data.txt";
+    try (FileWriter writer = new FileWriter(fileName)){
       writer.write(str);
       writer.close();
     }catch(IOException e){
       e.printStackTrace();
     }
+    this.updated = true;
   }
 
-  public Matrix getStationLineData(){
-    Scanner scanner = new Scanner(name+"_stop-line-data.txt");
-    String str = "";
-    while (scanner.hasNext()){
-      str += scanner.next();
+  public Matrix getStationLineData() throws FileNotFoundException{
+    if (! updated){
+      updateStationLineData();
     }
-    return Matrix.parseMatrix(str);
+    File file = new File("src/main/java/transit/"+this.name+"_stop-line-data.txt");
+    Scanner scanner = new Scanner(file);
+    String str = "";
+    while (scanner.hasNextLine()){
+      str += scanner.nextLine()+"\n";
+    }
+    Matrix slData = Matrix.parseMatrix(str);
+    slData.scale(1000);
+    return slData;
   }
 
-  public Vector lineCentralities(){
+  public Vector lineCentralities() throws FileNotFoundException{
     Vector lc = getStationLineData().weightedAverageOfPrincipalComponents();
-    System.out.println(lc);
-    lc.scaleToAverageScale(5.0);
+    // lc.scaleToAverageScale(5.0);
     return lc;
   }
 
-  public String lineCentralitiesToString(){
+  public String lineCentralitiesToString() throws FileNotFoundException{
     String result = "";
     Vector lc = lineCentralities();
     String[] lineNames = getLineNames();
@@ -94,13 +105,15 @@ public class TransitSystem extends EvenNetwork<Stop>{
     return result;
   }
 
-  public String sortedLineCentralitiesToString(){
-    return sortedLineCentralitiesToString(Mathematic.DEFAULT_ROUND);
+  public String sortedLineCentralities() throws FileNotFoundException{
+    return sortedLineCentralities(Mathematic.DEFAULT_ROUND);
   }
 
-  public String sortedLineCentralitiesToString(int p){
+  public String sortedLineCentralities(int p) throws FileNotFoundException{
     String[] lineNames = getLineNames();
-    double[] v = lineCentralities().getVals();
+    Vector lc = lineCentralities();
+    double[] v = lc.getVals();
+    System.out.println(Arrays.toString(v));
     for (int i = v.length-1; i >= 0; i--){ //bubble sort
       for (int j = 0; j < i; j++){
         if (v[j] > (v[j+1])){

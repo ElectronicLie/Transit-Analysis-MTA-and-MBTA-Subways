@@ -82,7 +82,7 @@ public class SystemOfEquations{
   }
 
   public double[] solutionAsArray(){
-    return solution.ary;
+    return solution.getVals();
   }
 
   private SquareMatrix pseudoMinor(int cExc){
