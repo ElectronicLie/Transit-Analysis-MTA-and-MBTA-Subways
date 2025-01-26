@@ -53,4 +53,14 @@ public class StochasticMatrix extends SquareMatrix{
     return result;
   }
 
+  public StochasticMatrix mult(StochasticMatrix A){
+    StochasticMatrix product = new StochasticMatrix(m());
+    for (int r = 0; r < m(); r++){
+      for (int c = 0; c < m(); c++){
+        product.vals[r][c] = Vector.dot(row(r), A.col(c));
+      }
+    }
+    return product;
+  }
+
 }

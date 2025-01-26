@@ -453,7 +453,7 @@ public class Matrix{
     return result;
   }
 
-  public Vector weightedAverageOfPrincipalComponents(){
+  public Vector weightedAverageOfPrincipalComponents(int k){
     ArrayList<Eigenvector> pca = allPrincipalComponents();
     // System.out.println("weighted average of PCs is being calculated");
     Vector mu;
@@ -465,9 +465,10 @@ public class Matrix{
     }
     Eigenvector pc;
     double eigenvalsSum = 0;
-    for (int i = 0; i < pca.size(); i++){
+    for (int i = 0; i < k; i++){
       pc = pca.get(i).copy();
-      // System.out.println(pc);
+      System.out.println(pc);
+      pc.makeAllEntriesNonNegative();
       eigenvalsSum += pc.getEigenvalue();
       pc.scale(pc.getEigenvalue());
       mu = mu.add(pc);
@@ -491,19 +492,19 @@ public class Matrix{
     return true;
   }
 
-  // public boolean roughlyEquals(Matrix other, double margin){
-  //   if (n() != other.n() || m() != other.m()){
-  //     return false;
-  //   }
-  //   for (int r = 0; r < m(); r++){
-  //     for (int c = 0; c < n(); c++){
-  //       if (! roughlyEquals(vals[r][c], other.vals[r][c], margin)){
-  //         return false;
-  //       }
-  //     }
-  //   }
-  //   return true;
-  // }
+  public boolean roughlyEquals(Matrix other, double margin){
+    if (n() != other.n() || m() != other.m()){
+      return false;
+    }
+    for (int r = 0; r < m(); r++){
+      for (int c = 0; c < n(); c++){
+        if (! Malo.roughlyEquals(vals[r][c], other.vals[r][c], margin)){
+          return false;
+        }
+      }
+    }
+    return true;
+  }
   //
   // public boolean roughlyEquals(Matrix other){
   //   return roughlyEquals(other, Math.pow(10, DEFAULT_ROUND));
@@ -609,6 +610,19 @@ public class Matrix{
       throw new IllegalStateException("cannot make a square copy of a non-square matrix");
     }
     SquareMatrix copy = new SquareMatrix(m());
+    for (int r = 0; r < m(); r++){
+      for (int c = 0; c < n(); c++){
+        copy.vals[r][c] = this.vals[r][c];
+      }
+    }
+    return copy;
+  }
+
+  public StochasticMatrix stochasticCopy(){
+    if (m() != n()){
+      throw new IllegalStateException("cannot make a square copy of a non-square matrix");
+    }
+    StochasticMatrix copy = new StochasticMatrix(m());
     for (int r = 0; r < m(); r++){
       for (int c = 0; c < n(); c++){
         copy.vals[r][c] = this.vals[r][c];
@@ -743,6 +757,16 @@ public class Matrix{
       }
     }
     return true;
+  }
+
+  protected void makeAllEntriesNonNegative(){
+    for (int r = 0; r < m(); r++){
+      for (int c = 0; c < n(); c++){
+        if (this.vals[r][c] < 0){
+          vals[r][c] *= -1;
+        }
+      }
+    }
   }
 
   public double sparsity(){

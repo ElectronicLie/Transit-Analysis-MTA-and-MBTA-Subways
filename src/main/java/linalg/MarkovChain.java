@@ -16,7 +16,21 @@ public class MarkovChain{
   }
 
   private Vector calcSteadyState(){
-    return matrix.pow(1023).col(0);
+    StochasticMatrix power = matrix.stochasticCopy();
+    while (! identicalColumns(power, Math.pow(10, Mathematic.DEFAULT_MARGIN))){
+      power = power.mult(matrix);
+    }
+    return power.col(0);
+  }
+
+  private static boolean identicalColumns(Matrix m, double margin){
+    boolean result = true;
+    for (int c = 1; c < m.n(); c++){
+      if (! m.col(0).roughlyEquals(m.col(c), margin)){
+        return false;
+      }
+    }
+    return result;
   }
 
   public Vector getSteadyState(){
@@ -54,8 +68,8 @@ public class MarkovChain{
       for (int j = 0; j < i; j++){
         if (v.get(j) > (v.get(j+1))){
           double tmp = v.get(j);
-          v.vals[j][0] = Malo.roundDouble(v.get(j+1), p);
-          v.vals[j+1][0] = Malo.roundDouble(tmp, p);
+          v.vals[j][0] = v.get(j+1);
+          v.vals[j+1][0] = tmp;
           String strTmp = nodeNames[j];
           nodeNames[j] = nodeNames[j+1];
           nodeNames[j+1] = strTmp;
@@ -64,18 +78,18 @@ public class MarkovChain{
     }
     String result = "";
     for (int n = 0; n < network.size(); n++){
-      result += "[ " + v.get(n) + " ] " + nodeNames[n] + "\n";
+      result += "[ " + Malo.roundDouble(v.get(n)) + " ] " + nodeNames[n] + "\n";
     }
     return result;
   }
 
-  public String matrixToString(){
-    return matrix.toString();
+  public Matrix matrix(){
+    return matrix;
   }
 
-  public String steadyStateMatrixToString(){
-    return matrix.pow(1023).toString();
-  }
+  // public String steadyStateMatrixToString(){
+  //   return matrix.pow(1023).toString();
+  // }
 
   public String toString(){
     String result = "";

@@ -27,7 +27,7 @@ public class TransitSystem extends EvenNetwork<Stop>{
     this.updated = u;
   }
 
-  public void doneAddingLines(){
+  public void close(){
     doneAddingLines = true;
     mc = new MarkovChain(this);
   }
@@ -40,7 +40,7 @@ public class TransitSystem extends EvenNetwork<Stop>{
     return this.mc.steadyStateToString();
   }
 
-  public String sortedStopWeightsToString(){
+  public String sortedStopWeights(){
     return this.mc.sortedSteadyStateToString();
   }
 
@@ -89,15 +89,16 @@ public class TransitSystem extends EvenNetwork<Stop>{
     return slData;
   }
 
-  public Vector lineCentralities() throws FileNotFoundException{
-    Vector lc = getStationLineData().weightedAverageOfPrincipalComponents();
+  public Vector lineCentralities(int j) throws FileNotFoundException{
+    System.out.println("covariance matrix:\n"+getStationLineData().coVarianceMatrix());
+    Vector lc = getStationLineData().weightedAverageOfPrincipalComponents(j);
     // lc.scaleToAverageScale(5.0);
     return lc;
   }
 
-  public String lineCentralitiesToString() throws FileNotFoundException{
+  public String lineCentralitiesToString(int k) throws FileNotFoundException{
     String result = "";
-    Vector lc = lineCentralities();
+    Vector lc = lineCentralities(k);
     String[] lineNames = getLineNames();
     for (int i = 0; i < lc.dim(); i++){
       result += "[ " + lc.get(i) + " ] " + lineNames[i] + "\n";
@@ -105,21 +106,20 @@ public class TransitSystem extends EvenNetwork<Stop>{
     return result;
   }
 
-  public String sortedLineCentralities() throws FileNotFoundException{
-    return sortedLineCentralities(Mathematic.DEFAULT_ROUND);
+  public String sortedLineCentralities(int k) throws FileNotFoundException{
+    return sortedLineCentralities(k, Mathematic.DEFAULT_ROUND);
   }
 
-  public String sortedLineCentralities(int p) throws FileNotFoundException{
+  public String sortedLineCentralities(int k, int p) throws FileNotFoundException{
     String[] lineNames = getLineNames();
-    Vector lc = lineCentralities();
+    Vector lc = lineCentralities(k);
     double[] v = lc.getVals();
-    System.out.println(Arrays.toString(v));
     for (int i = v.length-1; i >= 0; i--){ //bubble sort
       for (int j = 0; j < i; j++){
         if (v[j] > (v[j+1])){
           double tmp = v[j];
-          v[j] = Malo.roundDouble(v[j+1], p);
-          v[j+1] = Malo.roundDouble(tmp, p);
+          v[j] = v[j+1];
+          v[j+1] = tmp;
           String strTmp = lineNames[j];
           lineNames[j] = lineNames[j+1];
           lineNames[j+1] = strTmp;
@@ -128,7 +128,7 @@ public class TransitSystem extends EvenNetwork<Stop>{
     }
     String result = "";
     for (int n = 0; n < lineNames.length; n++){
-      result += "[ " + v[n] + " ] " + lineNames[n] + "\n";
+      result += "[ " + Malo.roundDouble(v[n],p) + " ] " + lineNames[n] + "\n";
     }
     return result;
   }
