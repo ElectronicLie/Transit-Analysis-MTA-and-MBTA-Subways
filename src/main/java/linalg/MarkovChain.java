@@ -11,7 +11,7 @@ public class MarkovChain{
   public MarkovChain(Network network){
     this.network = network;
     matrix = new StochasticMatrix(network);
-    // System.out.println("stochastic matrix:\n"+matrix);
+    System.out.println("stochastic matrix:\n"+matrix);
     steadyState = calcSteadyState();
   }
 
@@ -63,7 +63,7 @@ public class MarkovChain{
     for (int n = 0; n < network.size(); n++){
       nodeNames[n] = network.getNode(n).getName();
     }
-    Vector v = this.steadyState;
+    Vector v = this.steadyState.copy();
     for (int i = v.dim()-1; i >= 0; i--){ //bubble sort
       for (int j = 0; j < i; j++){
         if (v.get(j) > (v.get(j+1))){

@@ -148,9 +148,9 @@ public class Vector extends Matrix{
     scale(avg / absMu);
   }
 
-  // public void normalize(){
-  //   scale(1.0/mag());
-  // }
+  public void normalize(){
+    scale(1.0/mag());
+  }
 
   protected Vector sorted(){
     double[] ary = getVals();

@@ -6,11 +6,15 @@ public class AdjacencyNetwork<N extends Node> extends Network<N>{
     super();
   }
 
-  public boolean isAdjacency(){
+  boolean isAdjacency(){
     return true;
   }
 
-  public boolean isEven(){
+  boolean isEven(){
+    return false;
+  }
+
+  boolean hasLoops(){
     return false;
   }
 

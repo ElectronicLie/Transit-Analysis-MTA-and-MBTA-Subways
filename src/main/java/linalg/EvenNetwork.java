@@ -2,16 +2,23 @@ package linalg;
 
 public class EvenNetwork<N extends Node> extends Network<N>{
 
-  public EvenNetwork(){
+  private boolean includesSelf;
+
+  public EvenNetwork(boolean is){
     super();
+    includesSelf = is;
   }
 
-  public boolean isEven(){
+  boolean isEven(){
     return true;
   }
 
-  public boolean isAdjacency(){
+  boolean isAdjacency(){
     return false;
+  }
+
+  boolean hasLoops(){
+    return this.includesSelf;
   }
 
 }

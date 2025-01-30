@@ -403,6 +403,17 @@ public class Malo{
     return result;
   }
 
+  public static double[] aryRemove(double[] ary, int index){
+    double[] result = new double[(ary.length-1)];
+    for (int i = 0; i < index; i++){
+      result[i] = ary[i];
+    }
+    for (int i = index+1; i < ary.length; i++){
+      result[i-1] = ary[i];
+    }
+    return result;
+  }
+
   public static boolean aryContains(Fraction[] ary, Fraction d){
     for (Fraction item : ary){
       if (item.equals(d)){
@@ -488,14 +499,6 @@ public class Malo{
     Fraction[] result = new Fraction[trueLength-1];
     for (int i = 0; i < result.length; i++){
       result[i] = new Fraction(1, trueLength);
-    }
-    return result;
-  }
-
-  public static String[] aryRemoveFirst(String[] ary){
-    String[] result = new String[ary.length-1];
-    for (int i = 0; i < result.length; i++){
-      result[i] = ary[i+1];
     }
     return result;
   }

@@ -467,7 +467,7 @@ public class Matrix{
     double eigenvalsSum = 0;
     for (int i = 0; i < k; i++){
       pc = pca.get(i).copy();
-      System.out.println(pc);
+      // System.out.println(pc);
       pc.makeAllEntriesNonNegative();
       eigenvalsSum += pc.getEigenvalue();
       pc.scale(pc.getEigenvalue());
@@ -757,6 +757,16 @@ public class Matrix{
       }
     }
     return true;
+  }
+
+  protected boolean hasNegativeEntries(){
+    for (double[] row: vals){
+      for (double val : row){
+        if (val < 0)
+          return true;
+      }
+    }
+    return false;
   }
 
   protected void makeAllEntriesNonNegative(){

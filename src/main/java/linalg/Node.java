@@ -41,6 +41,7 @@ public class Node{
   }
 
   void updateNeighbors(){
+    System.out.println(Arrays.toString(edgeVals));
     if (nabrs.length != neighbors.size()){
       throw new IllegalStateException("nabrs - "+nabrs.length+", "+"neighbors - "+neighbors.size());
     }
@@ -103,11 +104,20 @@ public class Node{
         result++;
       }
     }
+    // if (! network.hasLoops()){
+    //   result--;
+    // }
     return result;
   }
 
   public void setNetwork(Network network){
     this.network = network;
+    if (! network.hasLoops()){
+      nabrs = Malo.aryRemove(nabrs, 0);
+      neighbors.remove(0);
+      edgeVals = Malo.aryRemove(edgeVals, 0);
+      edges.remove(0);
+    }
   }
 
   public Edge getEdge(Node other){
@@ -132,17 +142,25 @@ public class Node{
     return edgeVals;
   }
 
+  void setSelfVal(double val){
+    this.edgeVals[0] = val;
+  }
+
   public String getName(){
     return name;
   }
 
-  private double[] evenEdgeValsForActiveNeighbors(){ // including self
+  private double[] evenEdgeValsForActiveNeighbors(){ // including self when hasLoops
     double[] result = new double[edges.size()];
+    Node neibr;
+    int numAN = noActiveNeighbors();  // active neighbors (plus self if hasLoops)
     for (int i = 0; i < result.length; i++){
-      if (neighbors.get(i) == null)
+      neibr = neighbors.get(i);
+      if (neibr == null || (! network.hasLoops() && (neibr == this))){
         result[i] = 0;
-      else
-        result[i] = 1.0 / (double)(noActiveNeighbors()); // active neighbors plus self
+      }else{
+        result[i] = 1.0 / (double)(numAN);
+      }
     }
     return result;
   }
@@ -175,14 +193,14 @@ public class Node{
   public String deepToString(){
     return sumToString() + "\n"
       + terminology[1] + ": " + network.toString() + "\n"
-      + terminology[3] + ": " + neighbors.toString() + "\n"
+      // + terminology[3] + ": " + neighbors.toString() + "\n"
       + terminology[4] + ": " + edges.toString() + "\n"
       + terminology[5] + ": " + Arrays.toString(edgeVals);
   }
 
   public String deepToStringWithoutNetwork(){
     return sumToString() + "\n"
-      + terminology[3] + ": " + neighbors.toString() + "\n"
+      // + terminology[3] + ": " + neighbors.toString() + "\n"
       + terminology[4] + ": " + edges.toString() + "\n"
       + terminology[5] + ": " + Arrays.toString(edgeVals);
   }

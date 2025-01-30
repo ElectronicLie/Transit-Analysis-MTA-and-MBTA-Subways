@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 public class Mta{
 
+  // does not include busses, LIRR, MetroNorth, Amtrak
+
   public static final String[] LINES = new String[]
   {"A","B","C","D","E","F","G","J","L","M","N","Q","R","S42","Srp","Sfr","W","Z","1","2","3","4","5","6","7"};
 

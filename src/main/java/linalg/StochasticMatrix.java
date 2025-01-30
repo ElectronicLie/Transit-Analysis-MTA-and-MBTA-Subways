@@ -24,18 +24,20 @@ public class StochasticMatrix extends SquareMatrix{
   }
 
   private void stochasticize(){
-    //if (! allNonNegative(vals))
-      //throw new IllegalArgumentException("stochastic matrices cannot have negative entries");
+    if (hasNegativeEntries())
+      throw new IllegalArgumentException("matrix has negative entries");
     double colSum = 0;
     for (int c = 0; c < n(); c++){
       for (int r = 0; r < m(); r++){
         colSum += get(r,c);
       }
-      for (int r = 0; r < m(); r++){
-        if (colSum == 0){
-          throw new IllegalArgumentException("stochastic matrix column has all zero entries");
+      if (colSum == 0){
+        throw new IllegalStateException("matrix has a zero column");
+      }
+      if (colSum != 1){
+        for (int r = 0; r < m(); r++){
+          vals[r][c] /= colSum;
         }
-        vals[r][c] /= colSum;
       }
       colSum = 0;
     }

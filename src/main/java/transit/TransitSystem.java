@@ -20,6 +20,7 @@ public class TransitSystem extends EvenNetwork<Stop>{
   protected boolean updated;
 
   public TransitSystem(String n, String[] lns, boolean u){
+    super(false);
     nodes = new ArrayList<Stop>();
     this.lines = lns;
     doneAddingLines = false;
@@ -50,6 +51,7 @@ public class TransitSystem extends EvenNetwork<Stop>{
 
   protected void updateStationLineData(){
     double[] weights = getStopWeights();
+    // System.out.println(Arrays.toString(weights));
     if (weights.length != nodes.size()){
       throw new IllegalArgumentException("numbers of stops and stop weights are unequal");
     }
@@ -57,8 +59,10 @@ public class TransitSystem extends EvenNetwork<Stop>{
     Vector col;
     for (int s = 0; s < nodes.size(); s++){
       col = nodes.get(s).getLinesVector().copy();
+      col.normalize();
       col.scale(weights[s]);
       cols.add(col);
+      // System.out.println(nodes.get(s).getName()+":\n"+col);
     }
     Matrix data = new Matrix(cols);
     // data.scale(1000);
@@ -156,7 +160,7 @@ public class TransitSystem extends EvenNetwork<Stop>{
 
   public void addLine(String[] nodeNames, String lineName){
     if (! Malo.aryContains(this.lines, lineName)){
-      throw new IllegalArgumentException(lineName+" is not a line in the TransitSystem");
+      throw new IllegalArgumentException(lineName+" is not a line in the TransitSystem "+name);
     }
     Stop newStop;
     int index;

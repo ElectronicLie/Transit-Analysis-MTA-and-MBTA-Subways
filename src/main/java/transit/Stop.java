@@ -24,14 +24,14 @@ public class Stop extends Node{
     return lines;
   }
 
-  public void addLine(String newLine){
+  void addLine(String newLine){
     if (lines.get(Malo.aryIndexOf(system.getLineNames(), newLine)) == 0){
       this.strLines = Malo.aryAppend(strLines, newLine);
       lines = system.linesStringsToVector(strLines);
     }
   }
 
-  public void addNabr(String newNabr){
+  void addNabr(String newNabr){
     if (Malo.aryIndexOf(nabrs, newNabr) == -1){
       this.nabrs = Malo.aryAppend(this.nabrs, newNabr);
       neighbors.add(null);
@@ -39,7 +39,7 @@ public class Stop extends Node{
     }
   }
 
-  public void addNabrs(String[] newNabrs){
+  void addNabrs(String[] newNabrs){
     for (int n = 0; n < newNabrs.length; n++){
       addNabr(newNabrs[n]);
     }

@@ -40,6 +40,9 @@ public class Network<N extends Node>{
 
   protected void updateNode(int n){
     getNode(n).updateNeighbors();
+    // if (! hasLoops()){
+    //   getNode(n).setSelfVal(0);
+    // }
   }
 
   protected void updateNodes(){
@@ -82,11 +85,15 @@ public class Network<N extends Node>{
     return result;
   }
 
-  public boolean isEven(){
+  boolean isEven(){
     return false;
   }
 
-  public boolean isAdjacency(){
+  boolean isAdjacency(){
+    return false;
+  }
+
+  boolean hasLoops(){
     return false;
   }
 
