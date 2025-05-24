@@ -19,8 +19,10 @@ public class TransitSystem extends EvenNetwork<Stop>{
   protected String name;
   protected boolean updated;
 
+  private final double STOP_EFFECT_ON_LINES = 1;
+
   public TransitSystem(String n, String[] lns, boolean u){
-    super(false);
+    super(true);
     nodes = new ArrayList<Stop>();
     this.lines = lns;
     doneAddingLines = false;
@@ -60,7 +62,7 @@ public class TransitSystem extends EvenNetwork<Stop>{
     for (int s = 0; s < nodes.size(); s++){
       col = nodes.get(s).getLinesVector().copy();
       col.normalize();
-      col.scale(weights[s]);
+      col.scale(Math.pow(weights[s],STOP_EFFECT_ON_LINES));
       cols.add(col);
       // System.out.println(nodes.get(s).getName()+":\n"+col);
     }
@@ -94,7 +96,7 @@ public class TransitSystem extends EvenNetwork<Stop>{
   }
 
   public Vector lineCentralities(int j) throws FileNotFoundException{
-    System.out.println("covariance matrix:\n"+getStationLineData().coVarianceMatrix());
+    // System.out.println("covariance matrix:\n"+getStationLineData().coVarianceMatrix());
     Vector lc = getStationLineData().weightedAverageOfPrincipalComponents(j);
     // lc.scaleToAverageScale(5.0);
     return lc;

@@ -17,9 +17,12 @@ public class MarkovChain{
 
   private Vector calcSteadyState(){
     StochasticMatrix power = matrix.stochasticCopy();
+    // matrix = matrix.pow(2).stochasticCopy();
     while (! identicalColumns(power, Math.pow(10, Mathematic.DEFAULT_MARGIN))){
       power = power.mult(matrix);
+      // System.out.println(power);
     }
+    // System.out.println("done calculating steady state");
     return power.col(0);
   }
 

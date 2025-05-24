@@ -41,7 +41,7 @@ public class Node{
   }
 
   void updateNeighbors(){
-    System.out.println(Arrays.toString(edgeVals));
+    // System.out.println(Arrays.toString(edgeVals));
     if (nabrs.length != neighbors.size()){
       throw new IllegalStateException("nabrs - "+nabrs.length+", "+"neighbors - "+neighbors.size());
     }
@@ -121,9 +121,9 @@ public class Node{
   }
 
   public Edge getEdge(Node other){
-    if (other == this){
-      return edges.get(edges.size()-1);
-    }
+    // if (other == this ){
+    //   return edges.get(edges.size()-1);
+    // }
     for (int n = 0; n < neighbors.size(); n++){
       if (neighbors.get(n) != null){
         if (other.getName().equals(neighbors.get(n).getName())){
@@ -156,7 +156,7 @@ public class Node{
     int numAN = noActiveNeighbors();  // active neighbors (plus self if hasLoops)
     for (int i = 0; i < result.length; i++){
       neibr = neighbors.get(i);
-      if (neibr == null || (! network.hasLoops() && (neibr == this))){
+      if (neibr == null){
         result[i] = 0;
       }else{
         result[i] = 1.0 / (double)(numAN);
