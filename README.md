@@ -7,7 +7,8 @@ Toy.java defines a toy model that is used for testing.
 Methods in TransitSystem.java are used to transform these definitions into a network of nodes and edges, where the nodes are stations and an edge between two nodes represents part of one or more lines that travel directly through both stations consecutively.
 
 ## Centrality of stations
-A Markov chain is used to determine the 'centralities' of all stations that are at the intersection of two or more lines/services.
+A Markov chain is used to determine the 'centralities' of all stations that are at the intersection of two or more lines/services and, if suitable (depending on the size of the system), all terminal stations.
+All stations through which only one line/service travels (typically deemed 'local') are excluded from the Markov chain because they have a negligble effect on station-line relationships.
 
 ## Centrality of lines/services
 A matrix of 'stop-line' data is formed by setting the entry (_m_, _n_) to station _m_'s centrality value if line _n_ stops at it or 0 if line _n_ does not stop at it. This data is then mean-centered.
