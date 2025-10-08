@@ -12,7 +12,7 @@ All stations through which only one line/service travels (typically deemed 'loca
 
 ## Centrality of lines/services
 A matrix of 'stop-line' data is formed by setting the entry (_m_, _n_) to station _m_'s centrality value if line _n_ stops at it or 0 if line _n_ does not stop at it. This data is then mean-centered.
-Principal component analysis is applied to this data to determine the 'centralities' of all lines/services and outputs results to a text file, where each axis represents a line whose path has a measurable effect on the centrality of the stations it stops at.
+Principal component analysis is applied to this data to determine the 'centralities' of all lines/services and outputs results to a text file, where each axis represents a line (whose path has a measurable effect on the centrality of the stations it stops at) and the centralities are determined by the weighted average of all principal component eigenvectors by eigenvalue.
 Results for the MTA can be seen in src/main/java/results.txt, where a more positive value correlates directly with a higher centrality. Thus far, my model determines the **3** train to be the most central.
 
 ## Plans to measure efficiency of systems
